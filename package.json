@@ -1,0 +1,19 @@
+{
+  "name": "xibblyglobalchat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc --build && node .\\build\\index.js"
+  },
+  "keywords": [],
+  "author": "SzymonG110#8841",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1",
+    "tsc": "^2.0.4",
+    "typescript": "^4.7.4"
+  }
+}
