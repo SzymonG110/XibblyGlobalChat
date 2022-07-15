@@ -1,9 +1,9 @@
 import {ColorResolvable} from 'discord.js'
 
 export default interface EmbedInput {
+    title?: string
     content?: string
-    color?: ColorResolvable | "false"
-    footer?: [string, string?]
-    author?: [string, string?]
     fields?: [string, string, boolean?][]
+    footer?: [string, string?]
+    color?: ColorResolvable | 'false'
 }

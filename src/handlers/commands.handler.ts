@@ -61,7 +61,6 @@ export default class SlashCommandsHandler {
                         if (!cmd) this.client.application?.commands.create(slashCommnad)
                         else this.updateCommand(cmd, slashCommnad)
 
-                        slashCommnad.category = d.charAt(0).toUpperCase() + d.substring(1)
                         this.client.slashCommands.set(slashCommnad.name, slashCommnad)
                         console.log(`>> Loaded ${f} as ${slashCommnad.name}`)
 
@@ -72,7 +71,7 @@ export default class SlashCommandsHandler {
             setTimeout(() => this.clearCommands(registeredCommands), 5 * 1000)
 
         } catch (e) {
-            throw e;
+            throw e
         }
 
     }

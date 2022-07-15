@@ -21,7 +21,7 @@ export default class InteractionHandler {
                     ephemeral: true,
                     embeds: [
                         new Embed({
-                            author: ['Błąd'],
+                            title: 'Błąd',
                             color: 'RED',
                             content: `Błąd którego nie znam! Sprobuj ponownie.`
                         })
@@ -33,7 +33,7 @@ export default class InteractionHandler {
         if (!command) {
             this.command.reply({
                 ephemeral: true,
-                content: 'Unknown interaction command was used.'
+                content: 'Użyto nieznanego polecenia.'
             })
             return console.error(`Unknown command: ${this.command.commandName}`)
         }
@@ -45,7 +45,7 @@ export default class InteractionHandler {
                 ephemeral: true,
                 embeds: [
                     new Embed({
-                        author: ['Brak uprawnień do komendy'],
+                        title: 'Brak uprawnień do komendy',
                         color: 'RED',
                         content: `Nie posiadasz uprawnień do użycia tej komendy!\n Wymagane: ${command.permissions.map(perm => `\`${perm}\``).join(', ')}`
                     })
@@ -57,12 +57,12 @@ export default class InteractionHandler {
                 ephemeral: true,
                 embeds: [
                     new Embed({
-                        author: ['Brak uprawnień, komenda developerska'],
+                        title: 'Brak uprawnień, komenda developerska',
                         color: 'RED',
                         content: `Nie posiadasz uprawnień do użycia tej komendy!`
                     })
                 ]
-            }); // if there is no ";" it's an error
+            }); // if there is no ';' it's an error
 
         (command as any).run({interaction: this.command})
             .then((res: any) => {
@@ -98,7 +98,7 @@ export default class InteractionHandler {
                     ephemeral: true,
                     embeds: [
                         new Embed({
-                            author: ['Błąd komendy'],
+                            title: 'Błąd komendy',
                             color: 'RED',
                             content: `${er}`
                         })

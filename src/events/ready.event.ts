@@ -1,6 +1,6 @@
 import {bot} from '../structures/client'
 
-export default class eventClass {
+export default class {
 
     async run() {
 

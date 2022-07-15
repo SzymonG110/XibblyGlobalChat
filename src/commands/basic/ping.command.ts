@@ -12,7 +12,7 @@ export default {
 
             ephermal: false,
             send: {
-                author: ['Ping'],
+                title: 'Ping',
                 content: `Moj ping wynosi \`${bot.ws.ping}\`ms.`
             }
 

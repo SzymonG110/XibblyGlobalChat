@@ -10,11 +10,11 @@ export default class Embed extends MessageEmbed {
 
         data.content && this.setDescription(data.content)
         data.fields && data.fields.forEach(f => this.addField(...f))
-        data.author && this.setAuthor(...data.author)
+        data.title && this.setTitle(data.title)
         data.footer && this.setFooter(...data.footer)
 
-        data.color != "false" && data.color && this.setColor(data.color)
-        data.color != "false" && !data.color && this.setColor("RANDOM")
+        data.color != 'false' && data.color && this.setColor(data.color)
+        data.color != 'false' && !data.color && this.setColor('RANDOM')
 
     }
 

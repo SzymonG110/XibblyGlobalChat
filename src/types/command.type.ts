@@ -6,13 +6,14 @@ export interface SlashCommandArgs {
 }
 
 export interface SlashCommandOutput {
-    ephermal?: boolean,
+    ephermal?: boolean
     send: EmbedInput | string
 }
 
 export default interface CommandType extends ChatInputApplicationCommandData {
-    dev?: boolean,
-    permissions?: PermissionString[],
-    category?: string,
+    onlyGuild?: boolean
+    dev?: boolean
+    globalchtMod?: boolean
+    permissions?: PermissionString[]
     run: (data: SlashCommandArgs) => Promise<SlashCommandOutput | false | void>
 }

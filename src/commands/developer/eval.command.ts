@@ -21,23 +21,23 @@ export default {
 
     run: async ({interaction}) => {
 
-        const isEphermal = interaction.options.get("ephermal", true).value
+        const isEphermal = interaction.options.get('ephermal', true).value
 
         try {
-            const evaled = await eval(await interaction.options.get("code", true).value as string)
+            const evaled = await eval(await interaction.options.get('code', true).value as string)
 
             return {
                 ephermal: isEphermal,
                 send: {
-                    author: ['Eval'],
-                    content: `\`\`\`js\n${evaled ? evaled.toString().lenght > 4000 ? evaled.toString().slice(0, 4000) + '[..]' : evaled.toString() : "null"}\`\`\``
+                    title: 'Eval',
+                    content: `\`\`\`js\n${evaled ? evaled.toString().lenght > 4000 ? evaled.toString().slice(0, 4000) + '[..]' : evaled.toString() : 'null'}\`\`\``
                 }
             }
         } catch (e) {
             return {
                 ephermal: isEphermal,
                 send: {
-                    author: ['Eval'],
+                    title: 'Eval',
                     content: `\`\`\`${e}\`\`\``
                 }
             }
