@@ -1,5 +1,7 @@
 # XibblyGlobalChat Bot
 
+<a href="https://www.codefactor.io/repository/github/szymong110/xibblyglobalchat"><img src="https://www.codefactor.io/repository/github/szymong110/xibblyglobalchat/badge" alt="CodeFactor" /></a>
+
 Installation:
 ```
 git clone https://github.com/SzymonG110/XibblyGlobalChat.git && cd XibblyGlobalChat
