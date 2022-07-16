@@ -6,7 +6,7 @@ export default {
     name: 'ping',
     description: 'Ping bota',
 
-    run: async ({}) => {
+    run: async () => {
 
         return {
             send: {

@@ -6,7 +6,7 @@ export default {
     description: 'Wycisza użytkownika',
     onlyGuild: true,
 
-    run: async ({}) => {
+    run: async () => {
 
         return {
             send: {}
