@@ -8,7 +8,7 @@ export default {
     name: 'add',
     description: 'Dodaje serwer z czatem globalnym na listę weryfikacji',
     onlyGuild: true,
-    permissions: ['ADMINISTRATOR'],
+    globalchtMod: true,
     options: [
         {
             name: 'guildId',

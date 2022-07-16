@@ -5,6 +5,7 @@ export default {
     name: 'mute',
     description: 'Wycisza użytkownika',
     onlyGuild: true,
+    globalchtMod: true,
 
     run: async () => {
 

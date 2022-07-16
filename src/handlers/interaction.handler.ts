@@ -1,6 +1,6 @@
 import {CommandInteraction, Permissions} from 'discord.js'
 import {bot} from '../structures/client'
-import PermissionsHandler from './permissions.handler'
+import PermissionsUtil from '../utils/permissions.util'
 import Embed from '../structures/embed'
 
 export default class InteractionHandler {
@@ -26,6 +26,9 @@ export default class InteractionHandler {
             })
             return console.error(`Unknown command: ${this.command.commandName}`)
         }
+
+        if (command.globalchtMod && (!process.env.MODERATION_GC_TOKEN || !(process.env.MODERATION_GC_TOKEN != '')))
+            return
 
         if (command.onlyGuild && !this.command.guild)
             return this.command.reply({
@@ -57,7 +60,9 @@ export default class InteractionHandler {
 
         !this.command.guild?.name && (await this.command.guild?.fetch())
 
-        if (command.permissions && !new PermissionsHandler(command.permissions, this.command.member?.permissions as Permissions))
+        console.log(new PermissionsUtil(command.permissions!, this.command.member?.permissions as Permissions))
+
+        if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
             return this.command.reply({
                 ephemeral: true,
                 embeds: [
