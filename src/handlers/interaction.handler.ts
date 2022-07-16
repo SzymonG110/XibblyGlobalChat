@@ -36,7 +36,7 @@ export default class InteractionHandler {
                 })
 
 
-            if (this.checkPermissions(command))
+            if (await this.checkPermissions(command))
                 return this.command.reply({
                     ephemeral: true,
                     embeds: [
