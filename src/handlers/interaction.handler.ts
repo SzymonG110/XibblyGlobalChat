@@ -16,56 +16,56 @@ export default class InteractionHandler {
         if (!command || command.globalchtMod && (!process.env.MODERATION_GC_TOKEN || !(process.env.MODERATION_GC_TOKEN != '')))
             return
 
-        if (command.onlyGuild && !this.command.guild)
-            return this.command.reply({
-                ephemeral: true,
-                embeds: [
-                    new Embed({
-                        title: 'Błąd',
-                        color: 'RED',
-                        content: 'To polecenie jest dostępne tylko na serwerze.'
-                    })
-                ]
-            })
-
-        if (!this.command.guild?.members.cache.get(this.command.user.id))
-            return this.command.reply({
-                ephemeral: true,
-                embeds: [
-                    new Embed({
-                        title: 'Błąd',
-                        color: 'RED',
-                        content: 'Błąd którego nie znam! Sprobuj ponownie.'
-                    })
-                ]
-            })
-
-        if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
-            return this.command.reply({
-                ephemeral: true,
-                embeds: [
-                    new Embed({
-                        title: 'Brak uprawnień do komendy',
-                        color: 'RED',
-                        content: `Nie posiadasz uprawnień do użycia tej komendy!\n Wymagane: ${command.permissions.map(perm => `\`${perm}\``).join(', ')}`
-                    })
-                ]
-            })
-
-        if (command.dev && !bot.settings.ownerID.includes(this.command.user.id))
-            return this.command.reply({
-                ephemeral: true,
-                embeds: [
-                    new Embed({
-                        title: 'Brak uprawnień, komenda developerska',
-                        color: 'RED',
-                        content: `Nie posiadasz uprawnień do użycia tej komendy!`
-                    })
-                ]
-            })
-
-        const response = await command.run({interaction: this.command})
         try {
+            if (command.onlyGuild && !this.command.guild)
+                return this.command.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new Embed({
+                            title: 'Błąd',
+                            color: 'RED',
+                            content: 'To polecenie jest dostępne tylko na serwerze.'
+                        })
+                    ]
+                })
+
+            if (!this.command.guild?.members.cache.get(this.command.user.id))
+                return this.command.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new Embed({
+                            title: 'Błąd',
+                            color: 'RED',
+                            content: 'Błąd którego nie znam! Sprobuj ponownie.'
+                        })
+                    ]
+                })
+
+            if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
+                return this.command.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new Embed({
+                            title: 'Brak uprawnień do komendy',
+                            color: 'RED',
+                            content: `Nie posiadasz uprawnień do użycia tej komendy!\n Wymagane: ${command.permissions.map(perm => `\`${perm}\``).join(', ')}`
+                        })
+                    ]
+                })
+
+            if (command.dev && !bot.settings.ownerID.includes(this.command.user.id))
+                return this.command.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new Embed({
+                            title: 'Brak uprawnień, komenda developerska',
+                            color: 'RED',
+                            content: `Nie posiadasz uprawnień do użycia tej komendy!`
+                        })
+                    ]
+                })
+
+            const response = await command.run({interaction: this.command})
 
             if (!response)
                 return
@@ -87,7 +87,6 @@ export default class InteractionHandler {
                     break
 
             }
-
         } catch (e) {
             this.command.reply({
                 ephemeral: true,
