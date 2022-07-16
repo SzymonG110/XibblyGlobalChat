@@ -20,6 +20,7 @@ export default class {
                 ]
             })
 
+
         if (message.guild && message.channel && sqlite.run(`SELECT *
                                                             FROM globalchats
                                                             WHERE channelId = '${message.channel.id}'`).length != 0 && !message.author.bot && !message.webhookId)
