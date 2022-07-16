@@ -1,5 +1,7 @@
 import {bot} from '../structures/client'
 
+const sqlite = require('sqlite-sync')
+
 export default class {
 
     async run() {
@@ -14,6 +16,9 @@ export default class {
                     }
                 ]
             })
+
+        sqlite.connect(`${__dirname}/../../database.db`)
+        sqlite.run('CREATE TABLE IF NOT EXISTS globalchats (guildId TEXT, channelId TEXT)')
 
         console.log(`>>> ${bot.user?.tag} is ready!`)
 

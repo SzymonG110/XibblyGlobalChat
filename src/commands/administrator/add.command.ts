@@ -4,6 +4,8 @@ import {TextChannel} from 'discord.js'
 import {bot} from '../../structures/client'
 import axios from 'axios'
 
+const sqlite = require('sqlite-sync')
+
 export default {
 
     name: 'add',
@@ -40,13 +42,19 @@ export default {
             webhookUrl: createWebhook.url
         })
 
-        if (postResponse.status === 200)
+        if (postResponse.status === 200) {
+            sqlite.insert('globalchats', {
+                guildId: interaction.guild?.id,
+                channelId: channel.id
+            })
+
             return {
                 send: {
                     title: 'Dodano serwer',
                     content: 'Serwer oczekuje na weryfikacje.'
                 }
             }
+        }
 
         return {
             title: 'Błąd',

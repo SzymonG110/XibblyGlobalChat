@@ -3,6 +3,8 @@ import {bot} from '../structures/client'
 import PermissionsUtil from '../utils/permissions.util'
 import Embed from '../structures/embed'
 
+const sqlite = require('sqlite-sync')
+
 export default class InteractionHandler {
 
     constructor(private command: CommandInteraction) {
@@ -13,7 +15,9 @@ export default class InteractionHandler {
 
         const command = bot.slashCommands.get(this.command.commandName)
 
-        if (!command || command.globalchtMod && (!process.env.MODERATION_GC_TOKEN || !(process.env.MODERATION_GC_TOKEN != '')))
+        if (!command || command.globalchtMod && (!process.env.MODERATION_GC_TOKEN || !(process.env.MODERATION_GC_TOKEN != '')) || this.command.channel && sqlite.run(`SELECT *
+                                                                                                                                                                      FROM globalchats
+                                                                                                                                                                      WHERE channelId = '${this.command.channel.id}'`).length != 0)
             return
 
         try {
