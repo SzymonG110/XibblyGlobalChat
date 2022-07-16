@@ -9,7 +9,7 @@ export default class InteractionHandler {
         this.init()
     }
 
-    async init(): Promise<void> {
+    async init() {
 
         const command = bot.slashCommands.get(this.command.commandName)
 
