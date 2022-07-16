@@ -3,6 +3,7 @@ import {bot} from '../structures/client'
 import PermissionsUtil from '../utils/permissions.util'
 import Embed from '../structures/embed'
 import {SlashCommandOutput} from '../types/command.type'
+import ApiPostUtil from "../utils/apiPost.util";
 
 const sqlite = require('sqlite-sync')
 
@@ -33,6 +34,19 @@ export default class InteractionHandler {
                         })
                     ]
                 })
+
+            if (command.globalchtMod && !(await new ApiPostUtil().getUser(this.command.user.id)).moderator)
+                return this.command.reply({
+                    ephemeral: true,
+                    embeds: [
+                        new Embed({
+                            title: 'Błąd',
+                            color: 'RED',
+                            content: 'Nie masz uprawnień do wykonywania tej komendy.'
+                        })
+                    ]
+                })
+
 
             if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
                 return this.command.reply({
