@@ -35,43 +35,18 @@ export default class InteractionHandler {
                     ]
                 })
 
-            if (command.globalchtMod && !(await new ApiPostUtil().getUser(this.command.user.id)).moderator)
-                return this.command.reply({
-                    ephemeral: true,
-                    embeds: [
-                        new Embed({
-                            title: 'Błąd',
-                            color: 'RED',
-                            content: 'Nie masz uprawnień do wykonywania tej komendy.'
-                        })
-                    ]
-                })
 
-
-            if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
+            if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions) || command.globalchtMod && !(await new ApiPostUtil().getUser(this.command.user.id)).moderator || command.dev && !bot.settings.ownerID.includes(this.command.user.id))
                 return this.command.reply({
                     ephemeral: true,
                     embeds: [
                         new Embed({
                             title: 'Brak uprawnień do komendy',
                             color: 'RED',
-                            content: `Nie posiadasz uprawnień do użycia tej komendy!\n Wymagane: ${command.permissions.map(perm => `\`${perm}\``).join(', ')}`
+                            content: 'Nie posiadasz uprawnień do użycia tej komendy!'
                         })
                     ]
                 })
-
-            if (command.dev && !bot.settings.ownerID.includes(this.command.user.id))
-                return this.command.reply({
-                    ephemeral: true,
-                    embeds: [
-                        new Embed({
-                            title: 'Brak uprawnień, komenda developerska',
-                            color: 'RED',
-                            content: `Nie posiadasz uprawnień do użycia tej komendy!`
-                        })
-                    ]
-                })
-
             this.response(await command.run({interaction: this.command}))
 
         } catch (e) {
