@@ -11,7 +11,7 @@ export default class {
 
         if (message.content.startsWith(`<@${bot.user?.id}>`) ||
             message.content.startsWith(`<@!${bot.user?.id}>`))
-            message.reply({
+            return message.reply({
                 embeds: [
                     new Embed({
                         title: 'Wzmianka',
@@ -25,14 +25,13 @@ export default class {
                                                               WHERE channelId = '${message.channel.id}'`).length === 0 || message.author.bot || message.webhookId)
             return
 
-        const files = message.attachments.map(attachment => attachment.url)
         await new ApiPostUtil().send({
             userId: message.author.id,
             tag: message.author.tag,
             avatar_url: message.author.avatarURL() || 'https://i.pinimg.com/736x/5c/fa/f1/5cfaf1ef6a6cbbb1634c287a2cfccaf1.jpg',
             guildId: message.guild.id,
             content: message.content,
-            files
+            files: message.attachments.map(attachment => attachment.url)
         })
 
     }
