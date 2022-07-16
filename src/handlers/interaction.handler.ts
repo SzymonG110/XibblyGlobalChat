@@ -33,18 +33,6 @@ export default class InteractionHandler {
                     ]
                 })
 
-            if (!this.command.guild?.members.cache.get(this.command.user.id))
-                return this.command.reply({
-                    ephemeral: true,
-                    embeds: [
-                        new Embed({
-                            title: 'Błąd',
-                            color: 'RED',
-                            content: 'Błąd którego nie znam! Sprobuj ponownie.'
-                        })
-                    ]
-                })
-
             if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
                 return this.command.reply({
                     ephemeral: true,
