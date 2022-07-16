@@ -1,7 +1,7 @@
 import {Bot} from '../structures/client'
 import {existsSync, readdirSync} from 'fs'
 import CommandType from '../types/command.type'
-import {ApplicationCommand} from 'discord.js'
+import {ApplicationCommand, Collection} from 'discord.js'
 
 export default class SlashCommandsHandler {
 
@@ -24,7 +24,7 @@ export default class SlashCommandsHandler {
 
     }
 
-    async clearCommands(data: any): Promise<void> {
+    async clearCommands(data: Collection<string, ApplicationCommand>): Promise<void> {
         data?.forEach((c: ApplicationCommand) => {
             if (!this.client.slashCommands.find(s => s.name === c.name)) {
                 this.client.application?.commands.delete(c)
@@ -68,7 +68,7 @@ export default class SlashCommandsHandler {
 
             })
 
-            setTimeout(() => this.clearCommands(registeredCommands), 5 * 1000)
+            setTimeout(() => this.clearCommands(registeredCommands!), 5 * 1000)
 
         } catch (e) {
             throw e

@@ -5,15 +5,18 @@ import {TextChannel} from 'discord.js'
 
 export default {
 
-    name: 'verify',
-    description: 'Weryfikuje serwer z czatem globalnym',
-    globalchtMod: true,
-    options: [{
-        name: 'guildId',
-        description: 'ID serwera',
-        type: 'STRING',
-        required: true
-    }],
+    name: 'add',
+    description: 'Dodaje serwer z czatem globalnym na listę weryfikacji',
+    onlyGuild: true,
+    permissions: ['ADMINISTRATOR'],
+    options: [
+        {
+            name: 'guildId',
+            description: 'ID serwera do weryfikacji',
+            type: 'STRING',
+            required: true
+        }
+    ],
 
     run: async ({interaction}) => {
 
