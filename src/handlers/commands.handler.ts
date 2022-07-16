@@ -37,42 +37,36 @@ export default class SlashCommandsHandler {
 
         console.log('>>> Loading commands!')
 
-        try {
+        if (!this.client.application?.owner) await this.client.application?.fetch()
 
-            if (!this.client.application?.owner) await this.client.application?.fetch()
+        const registeredCommands = await this.client.application?.commands.fetch()
 
-            const registeredCommands = await this.client.application?.commands.fetch()
+        readdirSync(`${__dirname}/../commands`).forEach(d => {
 
-            readdirSync(`${__dirname}/../commands`).forEach(d => {
+            const dir = `${__dirname}/../commands/${d}`
 
-                const dir = `${__dirname}/../commands/${d}`
+            if (!dir || !existsSync(dir)) return
 
-                if (!dir || !existsSync(dir)) return
+            readdirSync(dir)
+                .filter(f => f.endsWith('.js'))
+                .filter(f => !f.startsWith('--'))
+                .forEach(f => {
 
-                readdirSync(dir)
-                    .filter(f => f.endsWith('.js'))
-                    .filter(f => !f.startsWith('--'))
-                    .forEach(f => {
+                    const slashCommnad: CommandType = require(`${dir}/${f}`).default
 
-                        const slashCommnad: CommandType = require(`${dir}/${f}`).default
+                    const cmd = registeredCommands?.find((s) => s.name === slashCommnad.name) || undefined
 
-                        const cmd = registeredCommands?.find((s) => s.name === slashCommnad.name) || undefined
+                    if (!cmd) this.client.application?.commands.create(slashCommnad)
+                    else this.updateCommand(cmd, slashCommnad)
 
-                        if (!cmd) this.client.application?.commands.create(slashCommnad)
-                        else this.updateCommand(cmd, slashCommnad)
+                    this.client.slashCommands.set(slashCommnad.name, slashCommnad)
+                    console.log(`>> Loaded ${f} as ${slashCommnad.name}`)
 
-                        this.client.slashCommands.set(slashCommnad.name, slashCommnad)
-                        console.log(`>> Loaded ${f} as ${slashCommnad.name}`)
+                })
 
-                    })
+        })
 
-            })
-
-            setTimeout(() => this.clearCommands(registeredCommands!), 5 * 1000)
-
-        } catch (e) {
-            throw e
-        }
+        setTimeout(() => this.clearCommands(registeredCommands!), 5 * 1000)
 
     }
 

@@ -1,9 +1,9 @@
-import {PermissionString} from 'discord.js'
+import {Permissions, PermissionString} from 'discord.js'
 
 export default class PermissionsHandler {
 
-    constructor(commandPerms: PermissionString[], memberPerms: string | PermissionString | any) {
-        return !commandPerms.some(p => !memberPerms.has(p))
+    constructor(commandPerms: PermissionString[], memberPerms: Permissions) {
+        return !commandPerms.some(perm => !memberPerms.has(perm))
     }
 
 }

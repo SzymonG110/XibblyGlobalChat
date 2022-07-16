@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js'
+import {CommandInteraction, Permissions} from 'discord.js'
 import {bot} from '../structures/client'
 import PermissionsHandler from './permissions.handler'
 import Embed from '../structures/embed'
@@ -9,12 +9,38 @@ export default class InteractionHandler {
         this.init()
     }
 
-    async init() {
+    async init(): Promise<void> {
 
         const command = bot.slashCommands.get(this.command.commandName)
 
+        if (!command) {
+            this.command.reply({
+                ephemeral: true,
+                embeds: [
+                    new Embed({
+                        title: 'Błąd',
+                        color: 'RED',
+                        content: 'Użyto nieistniejącego polecenia'
+                    })
+                ]
+            })
+            return console.error(`Unknown command: ${this.command.commandName}`)
+        }
+
+        if (command.onlyGuild && !this.command.guild)
+            return this.command.reply({
+                ephemeral: true,
+                embeds: [
+                    new Embed({
+                        title: 'Błąd',
+                        color: 'RED',
+                        content: 'To polecenie jest dostępne tylko na serwerze.'
+                    })
+                ]
+            })
+
         if (!this.command.guild?.members.cache.get(this.command.user.id)) {
-            !bot.users.cache.get(this.command.guild?.ownerId!) && (await bot.users.fetch(this.command.user.id))
+            !bot.users.cache.get(this.command.guild?.ownerId as string) && (await bot.users.fetch(this.command.user.id))
 
             if (!this.command.guild?.members.cache.get(this.command.user.id))
                 return this.command.reply({
@@ -23,23 +49,15 @@ export default class InteractionHandler {
                         new Embed({
                             title: 'Błąd',
                             color: 'RED',
-                            content: `Błąd którego nie znam! Sprobuj ponownie.`
+                            content: 'Błąd którego nie znam! Sprobuj ponownie.'
                         })
                     ]
                 })
         }
 
-        if (!command) {
-            this.command.reply({
-                ephemeral: true,
-                content: 'Użyto nieznanego polecenia.'
-            })
-            return console.error(`Unknown command: ${this.command.commandName}`)
-        }
-
         !this.command.guild?.name && (await this.command.guild?.fetch())
 
-        if (command.permissions && !new PermissionsHandler(command.permissions, this.command.member?.permissions))
+        if (command.permissions && !new PermissionsHandler(command.permissions, this.command.member?.permissions as Permissions))
             return this.command.reply({
                 ephemeral: true,
                 embeds: [
@@ -61,7 +79,7 @@ export default class InteractionHandler {
                         content: `Nie posiadasz uprawnień do użycia tej komendy!`
                     })
                 ]
-            }); // if there is no ';' it's an error
+            })
 
         const response = await command.run({interaction: this.command})
         try {
