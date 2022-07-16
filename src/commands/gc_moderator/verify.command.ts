@@ -1,17 +1,16 @@
 import CommandType from '../../types/command.type'
 import axios from 'axios'
 import {bot} from '../../structures/client'
-import {TextChannel} from 'discord.js'
 
 export default {
 
-    name: 'add',
+    name: 'verify',
     description: 'Dodaje serwer z czatem globalnym na listę weryfikacji',
     onlyGuild: true,
     globalchtMod: true,
     options: [
         {
-            name: 'guildId',
+            name: 'guildid',
             description: 'ID serwera do weryfikacji',
             type: 'STRING',
             required: true
@@ -20,7 +19,16 @@ export default {
 
     run: async ({interaction}) => {
 
-        const guildId = bot.channels.cache.get(interaction.options.getString('guildId') as string) as TextChannel
+        const guildId = bot.guilds.cache.get(interaction.options.getString('guildid') as string)
+
+        if (!guildId)
+            return {
+                ephermal: true,
+                send: {
+                    title: 'Błąd',
+                    content: 'Nie znaleziono serwera o podanym ID'
+                }
+            }
 
         const postResponse = await axios.post(`${bot.settings.baseApiUrl}/verify`, {
             token: process.env.MODERATION_GC_TOKEN,

@@ -60,8 +60,6 @@ export default class InteractionHandler {
 
         !this.command.guild?.name && (await this.command.guild?.fetch())
 
-        console.log(new PermissionsUtil(command.permissions!, this.command.member?.permissions as Permissions))
-
         if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions))
             return this.command.reply({
                 ephemeral: true,
