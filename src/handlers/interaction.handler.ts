@@ -2,7 +2,7 @@ import {CommandInteraction, Permissions} from 'discord.js'
 import {bot} from '../structures/client'
 import PermissionsUtil from '../utils/permissions.util'
 import Embed from '../structures/embed'
-import {SlashCommandOutput} from '../types/command.type'
+import CommandType, {SlashCommandOutput} from '../types/command.type'
 import ApiPostUtil from "../utils/apiPost.util";
 
 const sqlite = require('sqlite-sync')
@@ -36,7 +36,7 @@ export default class InteractionHandler {
                 })
 
 
-            if (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions) || command.globalchtMod && !(await new ApiPostUtil().getUser(this.command.user.id)).moderator || command.dev && !bot.settings.ownerID.includes(this.command.user.id))
+            if (this.checkPermissions(command))
                 return this.command.reply({
                     ephemeral: true,
                     embeds: [
@@ -85,6 +85,10 @@ export default class InteractionHandler {
                 break
 
         }
+    }
+
+    private async checkPermissions(command: CommandType): Promise<boolean> {
+        return (command.permissions && !new PermissionsUtil(command.permissions, this.command.member?.permissions as Permissions) || command.globalchtMod && !(await new ApiPostUtil().getUser(this.command.user.id)).moderator || command.dev && !bot.settings.ownerID.includes(this.command.user.id)) || false
     }
 
 }
