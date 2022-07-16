@@ -9,10 +9,7 @@ export default {
     run: async ({}) => {
 
         return {
-
-            ephermal: false,
             send: {}
-
         }
 
     }

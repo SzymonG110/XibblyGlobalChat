@@ -9,13 +9,10 @@ export default {
     run: async ({}) => {
 
         return {
-
-            ephermal: false,
             send: {
                 title: 'Ping',
                 content: `Moj ping wynosi \`${bot.ws.ping}\`ms.`
             }
-
         }
 
     }

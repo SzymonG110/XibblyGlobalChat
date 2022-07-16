@@ -42,7 +42,6 @@ export default {
 
         if (postResponse.status === 200)
             return {
-                ephermal: false,
                 send: {
                     title: 'Dodano serwer',
                     content: 'Serwer oczekuje na weryfikacje.'

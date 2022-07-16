@@ -14,8 +14,8 @@ export default class InteractionHandler {
         const command = bot.slashCommands.get(this.command.commandName)
 
         if (!this.command.guild?.members.cache.get(this.command.user.id)) {
-
             !bot.users.cache.get(this.command.guild?.ownerId!) && (await bot.users.fetch(this.command.user.id))
+
             if (!this.command.guild?.members.cache.get(this.command.user.id))
                 return this.command.reply({
                     ephemeral: true,
@@ -27,7 +27,6 @@ export default class InteractionHandler {
                         })
                     ]
                 })
-
         }
 
         if (!command) {
@@ -64,47 +63,42 @@ export default class InteractionHandler {
                 ]
             }); // if there is no ';' it's an error
 
-        (command as any).run({interaction: this.command})
-            .then((res: any) => {
-                if (!res || typeof res === 'boolean') return console.log(`Invalid interaction command run method response!: ${res}`)
+        const response = await command.run({interaction: this.command})
+        try {
 
-                if (res.send) {
+            if (!response)
+                return
 
-                    switch (typeof res.send) {
+            switch (typeof response.send) {
 
-                        case 'string':
-                            this.command.reply({
-                                ephemeral: res.ephermal,
-                                content: res.send
-                            })
-                            break
+                case 'string':
+                    this.command.reply({
+                        ephemeral: response.ephermal,
+                        content: response.send
+                    })
+                    break
 
-                        default:
-                            this.command.reply({
-                                ephemeral: res.ephermal,
-                                embeds: [new Embed(res.send)]
-                            })
-                            break
+                default:
+                    this.command.reply({
+                        ephemeral: response.ephermal,
+                        embeds: [new Embed(response.send)]
+                    })
+                    break
 
-                    }
+            }
 
-                } else console.info(`Response returns void`)
+        } catch (e) {
+            this.command.reply({
+                ephemeral: true,
+                embeds: [
+                    new Embed({
+                        title: 'Błąd komendy',
+                        color: 'RED',
+                        content: `${e}`
+                    })
+                ]
             })
-            .catch((er: any) => {
-
-                console.error(er)
-
-                return this.command.reply({
-                    ephemeral: true,
-                    embeds: [
-                        new Embed({
-                            title: 'Błąd komendy',
-                            color: 'RED',
-                            content: `${er}`
-                        })
-                    ]
-                })
-            })
+        }
 
     }
 
