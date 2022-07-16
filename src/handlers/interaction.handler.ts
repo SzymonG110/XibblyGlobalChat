@@ -2,6 +2,7 @@ import {CommandInteraction, Permissions} from 'discord.js'
 import {bot} from '../structures/client'
 import PermissionsUtil from '../utils/permissions.util'
 import Embed from '../structures/embed'
+import {SlashCommandOutput} from '../types/command.type'
 
 const sqlite = require('sqlite-sync')
 
@@ -57,28 +58,8 @@ export default class InteractionHandler {
                     ]
                 })
 
-            const response = await command.run({interaction: this.command})
+            this.response(await command.run({interaction: this.command}))
 
-            if (!response)
-                return
-
-            switch (typeof response.send) {
-
-                case 'string':
-                    this.command.reply({
-                        ephemeral: response.ephermal,
-                        content: response.send
-                    })
-                    break
-
-                default:
-                    this.command.reply({
-                        ephemeral: response.ephermal,
-                        embeds: [new Embed(response.send)]
-                    })
-                    break
-
-            }
         } catch (e) {
             this.command.reply({
                 ephemeral: true,
@@ -92,6 +73,29 @@ export default class InteractionHandler {
             })
         }
 
+    }
+
+    private response(response: SlashCommandOutput | false | void): void {
+        if (!response)
+            return
+
+        switch (typeof response.send) {
+
+            case 'string':
+                this.command.reply({
+                    ephemeral: response.ephermal,
+                    content: response.send
+                })
+                break
+
+            default:
+                this.command.reply({
+                    ephemeral: response.ephermal,
+                    embeds: [new Embed(response.send)]
+                })
+                break
+
+        }
     }
 
 }
