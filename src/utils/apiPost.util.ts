@@ -1,4 +1,4 @@
-import {SendMessageApi} from '../types/api.type'
+import {GlobalchatUserApi, SendMessageApi} from '../types/api.type'
 import axios from 'axios'
 import {bot} from '../structures/client'
 
@@ -12,7 +12,7 @@ export default class ApiPostUtil {
         return response.status === 200
     }
 
-    async getUser(userId: string): Promise<any> {
+    async getUser(userId: string): Promise<GlobalchatUserApi> {
         const response = await axios.post(`${bot.settings.baseApiUrl}/getuser`, {
             token: process.env.USER_TOKEN,
             userId
