@@ -17,6 +17,7 @@ Then rename the file from _.env.example_ to _.env_ and complete it.
 |     USER_TOKEN      |  BUASDFOG7SA9FNGASD7F88SMD.FOSDF79AMSMGDF78AS9MDFSGD9FASM   | User token generated at https://api.xibbly.tk/ |
 | MODERATION_GC_TOKEN |                    xAVE50JfD2Mp@mWV%sGX                     |        Private moderator token (remove)        |
 
+Next:
 ```
 npm i && tsc --build && node build/index.js
 ```
