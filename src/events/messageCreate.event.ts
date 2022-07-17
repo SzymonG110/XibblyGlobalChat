@@ -19,7 +19,7 @@ export default class {
             })
 
 
-        if (!message.guild || !message.channel)
+        if (!message.guild || !message.channel || message.webhookId)
             return
 
         try {

@@ -1,6 +1,6 @@
 import CommandType from '../../types/command.type'
-import axios from 'axios'
 import {bot} from '../../structures/client'
+import ApiPostUtil from "../../utils/apiPost.util";
 
 export default {
 
@@ -30,12 +30,7 @@ export default {
             }
 
         try {
-            // @todo to ApiPostUtil
-            const postResponse = await axios.post(`${bot.settings.baseApiUrl}/verify`, {
-                token: process.env.MODERATION_GC_TOKEN,
-                guildId: guild.id,
-                moderatorId: interaction.user.id
-            })
+            const postResponse = await new ApiPostUtil().verify(guild.id, interaction.user.id)
 
             if (postResponse.status === 200)
                 return {

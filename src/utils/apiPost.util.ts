@@ -27,4 +27,12 @@ export default class ApiPostUtil {
         return response.data
     }
 
+    public async verify(guildId: string, moderatorId: string): Promise<AxiosResponse<any, any>> {
+        return await axios.post(`${bot.settings.baseApiUrl}/verify`, {
+            token: process.env.MODERATION_GC_TOKEN,
+            guildId,
+            moderatorId
+        })
+    }
+
 }
