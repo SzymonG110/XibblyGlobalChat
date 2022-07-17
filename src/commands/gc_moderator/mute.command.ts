@@ -8,11 +8,9 @@ export default {
     globalchtMod: true,
 
     run: async () => {
-
         return {
             send: {}
         }
-
     }
 
 } as CommandType

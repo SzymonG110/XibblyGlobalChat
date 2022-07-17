@@ -20,7 +20,6 @@ export default {
     ],
 
     run: async ({interaction}) => {
-
         const isEphermal = interaction.options.get('ephermal', true).value
 
         try {

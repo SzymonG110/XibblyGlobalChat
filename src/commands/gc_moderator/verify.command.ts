@@ -18,10 +18,9 @@ export default {
     ],
 
     run: async ({interaction}) => {
+        const guild = bot.guilds.cache.get(interaction.options.getString('guildid') as string)
 
-        const guildId = bot.guilds.cache.get(interaction.options.getString('guildid') as string)
-
-        if (!guildId)
+        if (!guild)
             return {
                 ephermal: true,
                 send: {
@@ -30,28 +29,39 @@ export default {
                 }
             }
 
-        const postResponse = await axios.post(`${bot.settings.baseApiUrl}/verify`, {
-            token: process.env.MODERATION_GC_TOKEN,
-            guildId: guildId.id,
-            moderatorId: interaction.user.id
-        })
+        try {
+            // @todo to ApiPostUtil
+            const postResponse = await axios.post(`${bot.settings.baseApiUrl}/verify`, {
+                token: process.env.MODERATION_GC_TOKEN,
+                guildId: guild.id,
+                moderatorId: interaction.user.id
+            })
 
-        if (postResponse.status === 200)
+            if (postResponse.status === 200)
+                return {
+                    ephermal: false,
+                    send: {
+                        title: 'Serwer zweryfikowany',
+                        content: 'Serwer dodany do listy czatów gobalnych.'
+                    }
+                }
+
             return {
-                ephermal: false,
+                title: 'Błąd',
                 send: {
-                    title: 'Serwer zweryfikowany',
-                    content: 'Serwer dodany do listy czatów gobalnych.'
+                    title: 'Błąd',
+                    content: postResponse.data.error
                 }
             }
-
-        return {
-            title: 'Błąd',
-            send: {
-                content: postResponse.data.error
+        } catch (e) {
+            return {
+                title: 'Błąd',
+                send: {
+                    title: 'Błąd',
+                    content: 'Wystąpił błąd'
+                }
             }
         }
-
     }
 
 } as CommandType

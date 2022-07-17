@@ -7,14 +7,12 @@ export default {
     description: 'Ping bota',
 
     run: async () => {
-
         return {
             send: {
                 title: 'Ping',
                 content: `Moj ping wynosi \`${bot.ws.ping}\`ms.`
             }
         }
-
     }
 
 } as CommandType

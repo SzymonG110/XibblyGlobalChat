@@ -1,10 +1,8 @@
 import CommandType from '../../types/command.type'
-import {ChannelTypes} from 'discord.js/typings/enums'
-import {TextChannel} from 'discord.js'
 import {bot} from '../../structures/client'
 import axios from 'axios'
-
-const sqlite = require('sqlite-sync')
+import {TextChannel} from 'discord.js'
+import ApiPostUtil from "../../utils/apiPost.util";
 
 export default {
 
@@ -14,52 +12,62 @@ export default {
     permissions: ['ADMINISTRATOR'],
     options: [
         {
-            name: 'channel',
-            description: 'Kanał na którym ma być odpowiedzailny za czat',
-            type: 'CHANNEL',
-            required: true,
-            channel_types: [ChannelTypes.GUILD_TEXT]
+            name: 'webhook',
+            description: 'Link do webhooka',
+            type: 'STRING',
+            required: true
         }
     ],
 
     run: async ({interaction}) => {
 
-        const channel = interaction.options.getChannel('channel') as TextChannel
+        const webhookUrl = interaction.options.getString('webhook')
 
-        const channelInvite = await channel.createInvite({
-            reason: 'GlobalChat powered by Xibbly',
-            maxAge: 0
-        })
+        try {
+            const webhookData = await axios.get(webhookUrl as string)
 
-        const createWebhook = await channel.createWebhook('GlobalChat', {
-            reason: 'GlobalChat powered by Xibbly'
-        })
+            if (webhookData.status !== 200)
+                return {
+                    title: 'Błąd',
+                    content: 'Nie udało się pobrać danych z webhooka. Upewniej się, że link do webhooka jest poprawny.'
+                }
 
-        const postResponse = await axios.post(`${bot.settings.baseApiUrl}/add`, {
-            token: process.env.USER_TOKEN,
-            guildId: interaction.guild?.id,
-            inviteUrl: channelInvite.url,
-            webhookUrl: createWebhook.url
-        })
-
-        if (postResponse.status === 200) {
-            sqlite.insert('globalchats', {
-                guildId: interaction.guild?.id,
-                channelId: channel.id
+            const channel = bot.channels.cache.get(webhookData.data.channel_id) as TextChannel
+            const channelInvite = await channel.createInvite({
+                reason: 'GlobalChat powered by Xibbly',
+                maxAge: 0
             })
 
+            const postResponse = await new ApiPostUtil().add({
+                guildId: interaction.guildId as string,
+                channelId: webhookData.data.channel_id,
+                webhookUrl: webhookUrl as string,
+                inviteUrl: channelInvite.url
+            })
+
+            if (postResponse.status === 200)
+                return {
+                    send: {
+                        title: 'Dodano serwer',
+                        content: 'Serwer oczekuje na weryfikacje.'
+                    }
+                }
+
             return {
+                ephermal: true,
+                title: 'Błąd',
                 send: {
-                    title: 'Dodano serwer',
-                    content: 'Serwer oczekuje na weryfikacje.'
+                    content: postResponse.data.error
                 }
             }
-        }
 
-        return {
-            title: 'Błąd',
-            send: {
-                content: postResponse.data.error
+        } catch (e) {
+            return {
+                ephermal: true,
+                send: {
+                    title: 'Błąd',
+                    content: 'Nie udało się pobrać danych z webhooka. Upewniej się, że link do webhooka jest poprawny. Bądź serwer oczekuje na weryfikację.'
+                }
             }
         }
 

@@ -3,9 +3,7 @@ import {bot} from '../structures/client'
 import PermissionsUtil from '../utils/permissions.util'
 import Embed from '../structures/embed'
 import CommandType, {SlashCommandOutput} from '../types/command.type'
-import ApiPostUtil from "../utils/apiPost.util";
-
-const sqlite = require('sqlite-sync')
+import ApiPostUtil from '../utils/apiPost.util'
 
 export default class InteractionHandler {
 
@@ -14,12 +12,9 @@ export default class InteractionHandler {
     }
 
     async init(): Promise<void> {
-
         const command = bot.slashCommands.get(this.command.commandName)
 
-        if (!command || command.globalchtMod && (!process.env.MODERATION_GC_TOKEN || !(process.env.MODERATION_GC_TOKEN != '')) || this.command.channel && sqlite.run(`SELECT *
-                                                                                                                                                                      FROM globalchats
-                                                                                                                                                                      WHERE channelId = '${this.command.channel.id}'`).length != 0)
+        if (!command || command.globalchtMod && (!process.env.MODERATION_GC_TOKEN || !(process.env.MODERATION_GC_TOKEN != '')))
             return
 
         try {
@@ -35,7 +30,6 @@ export default class InteractionHandler {
                     ]
                 })
 
-
             if (await this.checkPermissions(command))
                 return this.command.reply({
                     ephemeral: true,
@@ -47,9 +41,11 @@ export default class InteractionHandler {
                         })
                     ]
                 })
-            this.response(await command.run({interaction: this.command}))
 
+            this.response(await command.run({interaction: this.command}))
         } catch (e) {
+            console.error(e)
+
             this.command.reply({
                 ephemeral: true,
                 embeds: [
@@ -61,7 +57,6 @@ export default class InteractionHandler {
                 ]
             })
         }
-
     }
 
     private response(response: SlashCommandOutput | false | void): void {
