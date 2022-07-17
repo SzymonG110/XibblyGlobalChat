@@ -1,6 +1,6 @@
 import CommandType from '../../types/command.type'
 import {bot} from '../../structures/client'
-import ApiPostUtil from "../../utils/apiPost.util";
+import ApiPostUtil from '../../utils/apiPost.util'
 
 export default {
 
@@ -34,7 +34,6 @@ export default {
 
             if (postResponse.status === 200)
                 return {
-                    ephermal: false,
                     send: {
                         title: 'Serwer zweryfikowany',
                         content: 'Serwer dodany do listy czatów gobalnych.'
@@ -42,6 +41,7 @@ export default {
                 }
 
             return {
+                ephermal: true,
                 title: 'Błąd',
                 send: {
                     title: 'Błąd',
@@ -50,6 +50,7 @@ export default {
             }
         } catch (e) {
             return {
+                ephermal: true,
                 title: 'Błąd',
                 send: {
                     title: 'Błąd',

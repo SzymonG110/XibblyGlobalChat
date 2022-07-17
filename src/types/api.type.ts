@@ -15,10 +15,17 @@ export interface SendMessageApi {
     files: string[]
 }
 
-export interface GlobalchatUserApi {
+export interface UserApi {
     userId: string
     moderator: boolean
     gcid: string
     support: string
     poweredBy: string
+}
+
+export interface MuteApi {
+    userId: string
+    moderatorId: string
+    reason: string
+    expiriedAt?: string
 }

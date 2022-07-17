@@ -1,4 +1,5 @@
 import CommandType from '../../types/command.type'
+import ApiPostUtil from '../../utils/apiPost.util'
 
 export default {
 
@@ -11,7 +12,7 @@ export default {
             name: 'userid',
             description: 'ID użytkownika z Xibbly GlobalChat',
             required: true,
-            type: 'NUMBER'
+            type: 'STRING'
         },
         {
             name: 'reason',
@@ -29,14 +30,41 @@ export default {
 
     run: async ({interaction}) => {
 
-        const userid = interaction.options.getNumber('userid')
+        const userid = interaction.options.getString('userid')
         const reason = interaction.options.getString('reason')
-        const time = interaction.options.getString('time', false) ? interaction.options.getString('time', false) : false
+        const time = interaction.options.getString('time', false) || undefined
 
+        try {
+            const mute = await new ApiPostUtil().mute({
+                userId: userid as string,
+                moderatorId: interaction.user.id,
+                reason: reason as string,
+                expiriedAt: time
+            })
 
+            if (mute.status === 200)
+                return {
+                    send: {
+                        title: 'Wyciszenie',
+                        content: `Użytkownik został wyciszony(\`${reason}\`; \`${time || 'permamentny'}\`).`
+                    }
+                }
 
-        return {
-            send: {}
+            return {
+                ephermal: true,
+                send: {
+                    title: 'Błąd',
+                    content: mute.data.error
+                }
+            }
+        } catch (e) {
+            return {
+                ephermal: true,
+                send: {
+                    title: 'Błąd',
+                    content: 'Wystąpił błąd'
+                }
+            }
         }
     }
 

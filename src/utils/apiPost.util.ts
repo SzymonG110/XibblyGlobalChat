@@ -1,4 +1,4 @@
-import {AddApi, GlobalchatUserApi, SendMessageApi} from '../types/api.type'
+import {AddApi, MuteApi, SendMessageApi, UserApi} from '../types/api.type'
 import axios, {AxiosResponse} from 'axios'
 import {bot} from '../structures/client'
 
@@ -19,7 +19,7 @@ export default class ApiPostUtil {
         return response.status === 200
     }
 
-    public async getUser(userId: string): Promise<GlobalchatUserApi> {
+    public async getUser(userId: string): Promise<UserApi> {
         const response = await axios.post(`${bot.settings.baseApiUrl}/user`, {
             token: process.env.USER_TOKEN,
             userId
@@ -32,6 +32,13 @@ export default class ApiPostUtil {
             token: process.env.MODERATION_GC_TOKEN,
             guildId,
             moderatorId
+        })
+    }
+
+    public async mute(data: MuteApi): Promise<AxiosResponse<any, any>> {
+        return await axios.post(`${bot.settings.baseApiUrl}/verify`, {
+            token: process.env.MODERATION_GC_TOKEN,
+            ...data
         })
     }
 

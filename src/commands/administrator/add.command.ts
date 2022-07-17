@@ -2,7 +2,7 @@ import CommandType from '../../types/command.type'
 import {bot} from '../../structures/client'
 import axios from 'axios'
 import {TextChannel} from 'discord.js'
-import ApiPostUtil from "../../utils/apiPost.util";
+import ApiPostUtil from '../../utils/apiPost.util'
 
 export default {
 
