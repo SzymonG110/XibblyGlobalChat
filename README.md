@@ -22,3 +22,4 @@ tsc --build && node build/index.js
 ```
 
 Support: https://discord.gg/89gxvAP
+Trello: https://trello.com/b/2bO7z2RI/xibblyglobalchat-bot
