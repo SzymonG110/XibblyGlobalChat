@@ -18,7 +18,7 @@ Then rename the file from _.env.example_ to _.env_ and complete it.
 | MODERATION_GC_TOKEN |                    xAVE50JfD2Mp@mWV%sGX                     |        Private moderator token (remove)        |
 
 ```
-tsc --build && node build/index.js
+npm i && tsc --build && node build/index.js
 ```
 
 Support: https://discord.gg/89gxvAP
